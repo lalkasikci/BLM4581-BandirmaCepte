@@ -5,8 +5,7 @@
 > **Ders:** BLM4581 Ağ Tabanlı Teknolojiler ve Uygulamaları  
 > **Öğrenci:** Zeynep Lal Kaşıkçı (22290070)  
 > **1. Hafta Teslimi:** [Google Drive Bağlantısı](https://drive.google.com/file/d/1bnuVva1_aneg7ZNEorloHewDkUVMJnBj/view?usp=drive_link)
-
----
+> **2. Hafta Teslimi:** [Google Drive Bağlantısı](https://drive.google.com/file/d/1E2LQXYvk5l5oFwKakm0hPz8iuuig6xtC/view?usp=sharing)
 
 ## 🚀 Özellikler
 
