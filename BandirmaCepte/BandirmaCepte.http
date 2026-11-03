@@ -1,0 +1,6 @@
+@BandirmaCepte_HostAddress = http://localhost:5032
+
+GET {{BandirmaCepte_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bandırma Cepte | Yerel Bilgi Portalı</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0b5ed7;
+            --secondary-color: #0d6efd;
+            --dark-color: #1e293b;
+            --light-bg: #f8fafc;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--light-bg);
+            color: #334155;
+        }
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.4rem;
+            letter-spacing: -0.5px;
+        }
+        .hero-banner {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+            color: white;
+            padding: 50px 0 40px;
+            margin-bottom: 30px;
+            border-bottom: 4px solid #38bdf8;
+        }
+        .quick-card {
+            border: none;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -2px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .quick-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.08);
+        }
+        .card-custom {
+            border: none;
+            border-radius: 14px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            transition: transform 0.2s, box-shadow 0.2s;
+            background: #fff;
+        }
+        .card-custom:hover {
+            box-shadow: 0 8px 20px rgba(0,0,0,0.07);
+        }
+        .badge-role-admin {
+            background-color: #ef4444;
+            color: white;
+        }
+        .badge-role-user {
+            background-color: #10b981;
+            color: white;
+        }
+        .time-pill {
+            background-color: #e0f2fe;
+            color: #0369a1;
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+            margin: 2px;
+        }
+        .nav-tabs .nav-link {
+            font-weight: 600;
+            color: #64748b;
+            border-radius: 8px 8px 0 0;
+        }
+        .nav-tabs .nav-link.active {
+            color: #0284c7;
+            border-bottom: 3px solid #0284c7;
+        }
+        .footer {
+            background-color: #0f172a;
+            color: #94a3b8;
+            padding: 30px 0;
+            margin-top: 60px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand text-white" href="#">
+                <i class="fa-solid fa-water text-info me-2"></i>Bandırma <span class="text-info">Cepte</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#haberler"><i class="fa-solid fa-newspaper me-1"></i> Haberler</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#otobusler"><i class="fa-solid fa-bus me-1"></i> Otobüs Saatleri</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#eczaneler"><i class="fa-solid fa-prescription-bottle-medical me-1"></i> Nöbetçi Eczaneler</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#depremler"><i class="fa-solid fa-chart-line me-1"></i> Depremler</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#acil"><i class="fa-solid fa-phone-flip me-1"></i> Acil Numaralar</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center gap-2">
+                    <a href="/swagger" target="_blank" class="btn btn-outline-info btn-sm">
+                        <i class="fa-solid fa-code me-1"></i> Swagger API
+                    </a>
+                    <div id="authArea">
+                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#authModal">
+                            <i class="fa-solid fa-user me-1"></i> Giriş Yap / Kayıt
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO & SUMMARY CARDS -->
+    <header class="hero-banner">
+        <div class="container">
+            <div class="row align-items-center mb-4">
+                <div class="col-lg-8">
+                    <span class="badge bg-info text-dark mb-2 px-3 py-2 fw-semibold">Bandırma Bilgi Portalı & Mobil Hizmetler</span>
+                    <h1 class="fw-bold display-6 mb-2">Bandırma'nın Nabzı Cebinizde</h1>
+                    <p class="lead text-light opacity-75 mb-0">Haberler, nöbetçi eczaneler, otobüs saatleri, deprem bilgileri ve acil numaralara tek noktadan anında ulaşın.</p>
+                </div>
+                <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+                    <div id="adminActionBtn" style="display: none;">
+                        <button class="btn btn-warning fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#addNewsModal">
+                            <i class="fa-solid fa-plus-circle me-1"></i> Yeni Haber Ekle
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Cards Row -->
+            <div class="row g-3">
+                <div class="col-md-3 col-6">
+                    <div class="quick-card p-3 d-flex align-items-center">
+                        <div class="rounded-circle bg-warning bg-opacity-25 p-3 me-3 text-warning">
+                            <i class="fa-solid fa-cloud-sun fa-2x"></i>
+                        </div>
+                        <div>
+                            <small class="text-muted fw-semibold">Hava Durumu</small>
+                            <h5 class="mb-0 fw-bold">17°C <span class="fs-6 fw-normal text-muted">Açık</span></h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="quick-card p-3 d-flex align-items-center">
+                        <div class="rounded-circle bg-danger bg-opacity-25 p-3 me-3 text-danger">
+                            <i class="fa-solid fa-heart-pulse fa-2x"></i>
+                        </div>
+                        <div>
+                            <small class="text-muted fw-semibold">Nöbetçi Eczane</small>
+                            <h5 class="mb-0 fw-bold" id="quickPharmacyName">Yükleniyor...</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="quick-card p-3 d-flex align-items-center">
+                        <div class="rounded-circle bg-primary bg-opacity-25 p-3 me-3 text-primary">
+                            <i class="fa-solid fa-bus-simple fa-2x"></i>
+                        </div>
+                        <div>
+                            <small class="text-muted fw-semibold">Otobüs Hatları</small>
+                            <h5 class="mb-0 fw-bold" id="quickBusCount">2 Aktif Hat</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="quick-card p-3 d-flex align-items-center">
+                        <div class="rounded-circle bg-success bg-opacity-25 p-3 me-3 text-success">
+                            <i class="fa-solid fa-phone-volume fa-2x"></i>
+                        </div>
+                        <div>
+                            <small class="text-muted fw-semibold">Acil Çağrı</small>
+                            <h5 class="mb-0 fw-bold"><a href="tel:112" class="text-decoration-none text-success">112 Acil</a></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <div class="container my-4">
+
+        <!-- 1. HABERLER -->
+        <section id="haberler" class="mb-5">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="fw-bold"><i class="fa-solid fa-newspaper text-primary me-2"></i>Yerel Haberler ve Duyurular</h3>
+                <span class="badge bg-light text-dark border">Otomatik Güncel</span>
+            </div>
+            <div class="row g-4" id="newsContainer">
+                <div class="col-12 text-center py-4">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="text-muted mt-2">Haberler yükleniyor...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. OTOBÜS HATLARI & SAATLERİ -->
+        <section id="otobusler" class="mb-5">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="fw-bold"><i class="fa-solid fa-bus text-info me-2"></i>Otobüs Hatları ve Hareket Saatleri</h3>
+                <span class="text-muted small">Bandırma Şehir İçi Ulaşım</span>
+            </div>
+            <div class="row g-3" id="busLinesContainer">
+                <div class="col-12 text-center py-4">
+                    <div class="spinner-border text-info" role="status"></div>
+                </div>
+            </div>
+        </section>
+
+        <div class="row g-4">
+            <!-- 3. NÖBETÇİ ECZANELER -->
+            <div class="col-lg-6" id="eczaneler">
+                <div class="card card-custom h-100 p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="fw-bold mb-0"><i class="fa-solid fa-prescription-bottle-medical text-danger me-2"></i>Nöbetçi Eczaneler</h4>
+                        <span class="badge bg-danger">Bugün</span>
+                    </div>
+                    <div id="pharmaciesContainer">
+                        <div class="text-center py-3">
+                            <div class="spinner-border text-danger" role="status"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. ACİL NUMARALAR -->
+            <div class="col-lg-6" id="acil">
+                <div class="card card-custom h-100 p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="fw-bold mb-0"><i class="fa-solid fa-phone-flip text-success me-2"></i>Acil ve Önemli Numaralar</h4>
+                        <span class="badge bg-success">Hızlı Arama</span>
+                    </div>
+                    <div id="emergencyContainer">
+                        <div class="text-center py-3">
+                            <div class="spinner-border text-success" role="status"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. SON DEPREMLER -->
+        <section id="depremler" class="mt-5">
+            <div class="card card-custom p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="fw-bold mb-0"><i class="fa-solid fa-chart-line text-warning me-2"></i>Bandırma ve Çevresi Son Depremler</h4>
+                    <span class="text-muted small">Son 24 Saat</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Büyüklük (ML)</th>
+                                <th>Konum</th>
+                                <th>Derinlik</th>
+                                <th>Tarih / Saat</th>
+                            </tr>
+                        </thead>
+                        <tbody id="earthquakeTableBody">
+                            <tr>
+                                <td colspan="4" class="text-center py-3">Yükleniyor...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- MODAL: GİRİŞ YAP / KAYIT OL -->
+    <div class="modal fade" id="authModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-user-lock me-2 text-info"></i>Kullanıcı Girişi / Kayıt</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <ul class="nav nav-pills nav-fill mb-3" id="authTab" role="tablist">
+                        <li class="nav-item">
+                            <button class="nav-link active fw-bold" id="login-tab" data-bs-toggle="pill" data-bs-target="#loginPane">Giriş Yap</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link fw-bold" id="register-tab" data-bs-toggle="pill" data-bs-target="#registerPane">Kayıt Ol</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <!-- Giriş Formu -->
+                        <div class="tab-pane fade show active" id="loginPane">
+                            <form id="loginForm">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Kullanıcı Adı</label>
+                                    <input type="text" id="loginUsername" class="form-control" placeholder="Örn: admin veya user" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Şifre</label>
+                                    <input type="password" id="loginPassword" class="form-control" placeholder="Şifrenizi girin" required>
+                                </div>
+                                <div class="alert alert-info py-2 small mb-3">
+                                    <strong>Hazır Hesaplar:</strong><br>
+                                    • Yönetici (Admin): <code>admin</code> / <code>Admin123!</code><br>
+                                    • Standart Kullanıcı: <code>user</code> / <code>User123!</code>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100 fw-bold py-2">
+                                    <i class="fa-solid fa-right-to-bracket me-1"></i> Giriş Yap
+                                </button>
+                            </form>
+                        </div>
+                        <!-- Kayıt Formu -->
+                        <div class="tab-pane fade" id="registerPane">
+                            <form id="registerForm">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Kullanıcı Adı</label>
+                                    <input type="text" id="regUsername" class="form-control" placeholder="Kullanıcı adı belirleyin" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Şifre</label>
+                                    <input type="password" id="regPassword" class="form-control" placeholder="Güçlü bir şifre girin" required>
+                                </div>
+                                <button type="submit" class="btn btn-success w-100 fw-bold py-2">
+                                    <i class="fa-solid fa-user-plus me-1"></i> Hesap Oluştur
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    <div id="authAlert" class="mt-3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: YENİ HABER EKLE (ADMIN) -->
+    <div class="modal fade" id="addNewsModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title fw-bold text-dark"><i class="fa-solid fa-plus-circle me-2"></i>Yeni Haber Ekle (Admin)</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="addNewsForm">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Haber Başlığı</label>
+                            <input type="text" id="newsTitle" class="form-control" placeholder="Haber başlığı" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Haber İçeriği</label>
+                            <textarea id="newsContent" class="form-control" rows="5" placeholder="Haber detaylarını yazın..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-warning w-100 fw-bold py-2">
+                            <i class="fa-solid fa-save me-1"></i> Haberi Yayınla
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container text-center">
+            <h5 class="fw-bold text-white mb-2"><i class="fa-solid fa-water text-info me-2"></i>Bandırma Cepte</h5>
+            <p class="text-muted small mb-3">BLM4581 Ağ Tabanlı Teknolojiler ve Uygulamaları - Dönem Projesi</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="/swagger" target="_blank" class="text-info text-decoration-none small">
+                    <i class="fa-solid fa-code me-1"></i> Swagger API Dokümantasyonu
+                </a>
+                <span class="text-secondary">|</span>
+                <span class="text-light small">.NET 10 & PostgreSQL Web API</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const API_URL = '';
+        let currentUser = null;
+
+        // Sayfa yüklendiğinde çalışacaklar
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            loadNews();
+            loadBusLines();
+            loadPharmacies();
+            loadEmergencyContacts();
+            loadEarthquakes();
+        });
+
+        // 1. OTURUM KONTROLÜ
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            const username = localStorage.getItem('username');
+            const role = localStorage.getItem('role');
+
+            const authArea = document.getElementById('authArea');
+            const adminActionBtn = document.getElementById('adminActionBtn');
+
+            if (token && username) {
+                currentUser = { username, role, token };
+                const badgeClass = role === 'Admin' ? 'badge-role-admin' : 'badge-role-user';
+                authArea.innerHTML = `
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge ${badgeClass} p-2">
+                            <i class="fa-solid fa-user-shield me-1"></i>${username} (${role})
+                        </span>
+                        <button class="btn btn-outline-light btn-sm" onclick="logout()">
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        </button>
+                    </div>
+                `;
+                if (role === 'Admin') {
+                    adminActionBtn.style.display = 'block';
+                } else {
+                    adminActionBtn.style.display = 'none';
+                }
+            } else {
+                currentUser = null;
+                adminActionBtn.style.display = 'none';
+                authArea.innerHTML = `
+                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#authModal">
+                        <i class="fa-solid fa-user me-1"></i> Giriş Yap / Kayıt
+                    </button>
+                `;
+            }
+        }
+
+        function logout() {
+            localStorage.clear();
+            currentUser = null;
+            checkAuth();
+            loadNews();
+        }
+
+        // 2. GİRİŞ & KAYIT
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            const alertBox = document.getElementById('authAlert');
+
+            try {
+                const res = await fetch(`${API_URL}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('username', data.username);
+                    localStorage.setItem('role', data.role);
+                    bootstrap.Modal.getInstance(document.getElementById('authModal')).hide();
+                    checkAuth();
+                    loadNews();
+                } else {
+                    alertBox.innerHTML = `<div class="alert alert-danger py-2 small">${data.message || 'Giriş başarısız!'}</div>`;
+                }
+            } catch (err) {
+                alertBox.innerHTML = `<div class="alert alert-danger py-2 small">Bağlantı hatası: ${err.message}</div>`;
+            }
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('regUsername').value;
+            const password = document.getElementById('regPassword').value;
+            const alertBox = document.getElementById('authAlert');
+
+            try {
+                const res = await fetch(`${API_URL}/api/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    alertBox.innerHTML = `<div class="alert alert-success py-2 small">${data.message} Giriş yapabilirsiniz.</div>`;
+                    document.getElementById('login-tab').click();
+                } else {
+                    alertBox.innerHTML = `<div class="alert alert-danger py-2 small">${data.message || 'Kayıt başarısız!'}</div>`;
+                }
+            } catch (err) {
+                alertBox.innerHTML = `<div class="alert alert-danger py-2 small">Bağlantı hatası: ${err.message}</div>`;
+            }
+        });
+
+        // 3. HABERLERİ YÜKLE
+        async function loadNews() {
+            const container = document.getElementById('newsContainer');
+            try {
+                const res = await fetch(`${API_URL}/api/news`);
+                const news = await res.json();
+                if (news.length === 0) {
+                    container.innerHTML = `<div class="col-12"><div class="alert alert-light text-center border">Henüz yayınlanmış haber bulunmamaktadır.</div></div>`;
+                    return;
+                }
+                container.innerHTML = news.map(item => `
+                    <div class="col-md-6">
+                        <div class="card card-custom h-100 p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="badge bg-primary bg-opacity-10 text-primary fw-bold">Yerel Gelişme</span>
+                                <small class="text-muted"><i class="fa-regular fa-clock me-1"></i>${new Date(item.publishedAt).toLocaleDateString('tr-TR')}</small>
+                            </div>
+                            <h5 class="fw-bold text-dark">${escapeHtml(item.title)}</h5>
+                            <p class="text-secondary mb-3">${escapeHtml(item.content)}</p>
+                            ${currentUser && currentUser.role === 'Admin' ? `
+                                <div class="mt-auto pt-2 border-top text-end">
+                                    <button class="btn btn-outline-danger btn-sm" onclick="deleteNews(${item.id})">
+                                        <i class="fa-solid fa-trash me-1"></i> Sil
+                                    </button>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `).join('');
+            } catch (err) {
+                container.innerHTML = `<div class="col-12"><div class="alert alert-warning">Haberler yüklenirken hata oluştu: ${err.message}</div></div>`;
+            }
+        }
+
+        // HABER SİL (ADMIN)
+        async function deleteNews(id) {
+            if (!confirm('Bu haberi silmek istediğinizden emin misiniz?')) return;
+            try {
+                const res = await fetch(`${API_URL}/api/news/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${currentUser.token}` }
+                });
+                if (res.ok) {
+                    loadNews();
+                } else {
+                    alert('Haber silinemedi!');
+                }
+            } catch (err) {
+                alert('Hata: ' + err.message);
+            }
+        }
+
+        // HABER EKLE (ADMIN)
+        document.getElementById('addNewsForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('newsTitle').value;
+            const content = document.getElementById('newsContent').value;
+
+            try {
+                const res = await fetch(`${API_URL}/api/news`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentUser.token}`
+                    },
+                    body: JSON.stringify({ title, content })
+                });
+                if (res.ok) {
+                    document.getElementById('addNewsForm').reset();
+                    bootstrap.Modal.getInstance(document.getElementById('addNewsModal')).hide();
+                    loadNews();
+                } else {
+                    alert('Haber eklenirken yetki veya doğrulama hatası oluştu.');
+                }
+            } catch (err) {
+                alert('Hata: ' + err.message);
+            }
+        });
+
+        // 4. OTOBÜS HATLARI
+        async function loadBusLines() {
+            const container = document.getElementById('busLinesContainer');
+            try {
+                const res = await fetch(`${API_URL}/api/buslines`);
+                const lines = await res.json();
+                document.getElementById('quickBusCount').innerText = `${lines.length} Aktif Hat`;
+                container.innerHTML = lines.map(line => `
+                    <div class="col-md-6">
+                        <div class="card card-custom p-3">
+                            <div class="d-flex align-items-center mb-2">
+                                <span class="badge bg-primary fs-6 px-3 py-2 me-2">${line.lineNumber}</span>
+                                <h6 class="fw-bold mb-0 text-dark">${escapeHtml(line.route)}</h6>
+                            </div>
+                            <div class="mt-2">
+                                <small class="text-muted d-block mb-1 fw-semibold"><i class="fa-solid fa-clock me-1"></i>Kalkış Saatleri:</small>
+                                <div>
+                                    ${line.scheduleCsv.split(',').map(time => `<span class="time-pill">${time.trim()}</span>`).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (err) {
+                container.innerHTML = `<div class="col-12"><div class="alert alert-warning">Otobüs hatları yüklenemedi.</div></div>`;
+            }
+        }
+
+        // 5. NÖBETÇİ ECZANELER
+        async function loadPharmacies() {
+            const container = document.getElementById('pharmaciesContainer');
+            try {
+                const res = await fetch(`${API_URL}/api/pharmacies`);
+                const list = await res.json();
+                const onCall = list.find(p => p.isOnCall);
+                if (onCall) {
+                    document.getElementById('quickPharmacyName').innerText = onCall.name;
+                }
+                container.innerHTML = list.map(item => `
+                    <div class="p-3 mb-2 rounded border-start border-4 ${item.isOnCall ? 'border-danger bg-danger bg-opacity-10' : 'border-secondary bg-light'}">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <h6 class="fw-bold mb-1">${escapeHtml(item.name)} ${item.isOnCall ? '<span class="badge bg-danger ms-1">NÖBETÇİ</span>' : ''}</h6>
+                            ${item.phone ? `<a href="tel:${item.phone}" class="btn btn-sm btn-outline-danger py-0 px-2"><i class="fa-solid fa-phone me-1"></i>${item.phone}</a>` : ''}
+                        </div>
+                        <small class="text-secondary d-block"><i class="fa-solid fa-location-dot me-1"></i>${escapeHtml(item.address)}</small>
+                    </div>
+                `).join('');
+            } catch (err) {
+                container.innerHTML = `<div class="alert alert-warning">Eczaneler yüklenemedi.</div>`;
+            }
+        }
+
+        // 6. ACİL NUMARALAR
+        async function loadEmergencyContacts() {
+            const container = document.getElementById('emergencyContainer');
+            try {
+                const res = await fetch(`${API_URL}/api/emergencycontacts`);
+                const list = await res.json();
+                container.innerHTML = list.map(c => `
+                    <div class="d-flex justify-content-between align-items-center p-3 mb-2 bg-light rounded border">
+                        <div>
+                            <h6 class="fw-bold mb-0">${escapeHtml(c.name)}</h6>
+                            <small class="text-muted">${escapeHtml(c.description || '')}</small>
+                        </div>
+                        <a href="tel:${c.phoneNumber}" class="btn btn-success fw-bold btn-sm">
+                            <i class="fa-solid fa-phone me-1"></i> ${c.phoneNumber}
+                        </a>
+                    </div>
+                `).join('');
+            } catch (err) {
+                container.innerHTML = `<div class="alert alert-warning">Acil numaralar yüklenemedi.</div>`;
+            }
+        }
+
+        // 7. DEPREMLER
+        async function loadEarthquakes() {
+            const tbody = document.getElementById('earthquakeTableBody');
+            try {
+                const res = await fetch(`${API_URL}/api/earthquakes`);
+                const list = await res.json();
+                tbody.innerHTML = list.map(e => `
+                    <tr>
+                        <td>
+                            <span class="badge ${e.magnitude >= 3.5 ? 'bg-danger' : e.magnitude >= 3.0 ? 'bg-warning text-dark' : 'bg-secondary'} px-2 py-1">
+                                ${e.magnitude.toFixed(1)}
+                            </span>
+                        </td>
+                        <td class="fw-semibold">${escapeHtml(e.location)}</td>
+                        <td>${e.depth} km</td>
+                        <td class="text-muted">${new Date(e.occurrenceTime).toLocaleString('tr-TR')}</td>
+                    </tr>
+                `).join('');
+            } catch (err) {
+                tbody.innerHTML = `<tr><td colspan="4" class="text-warning text-center">Deprem verisi yüklenemedi.</td></tr>`;
+            }
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
