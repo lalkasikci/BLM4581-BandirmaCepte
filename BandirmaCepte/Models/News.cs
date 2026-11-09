@@ -1,4 +1,5 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace BandirmaCepte.Models;
 
@@ -6,12 +7,23 @@ public class News
 {
     public int Id { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "Haber başlığı zorunludur.")]
     [MaxLength(200)]
     public string Title { get; set; } = string.Empty;
 
-    [Required]
+    [Required(ErrorMessage = "Haber içeriği zorunludur.")]
     public string Content { get; set; } = string.Empty;
 
+    [MaxLength(150)]
+    public string? Source { get; set; } // Kaynak: örn. "Bandırma Belediyesi", "BANÜ Basın"
+
     public DateTime PublishedAt { get; set; } = DateTime.UtcNow;
+
+    public bool IsPublished { get; set; } = true;
+
+    // İlişki: Haberi ekleyen/yöneten kullanıcı (User)
+    public int? UserId { get; set; }
+
+    [JsonIgnore]
+    public User? User { get; set; }
 }

@@ -1,16 +1,17 @@
-// Program.cs - ASP.NET Core Web API setup
+﻿// Program.cs - ASP.NET Core Web API setup
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Text.Json.Serialization;
 using BandirmaCepte;
 using BandirmaCepte.Data;
 using BandirmaCepte.Models;
-using Microsoft.OpenApi.Models; // added for Swagger
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add PostgreSQL DbContext
 builder.Services.AddDbContext<BandirmaContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("BandirmaDb")));
 
@@ -43,10 +44,24 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("UserOrAdmin", policy => policy.RequireRole("User", "Admin"));
 });
 
-builder.Services.AddControllers();
+// Controllers with JSON options to ignore circular references
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+    });
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Bandırma Cepte API",
+        Version = "v1",
+        Description = "Bandırma Cepte - Yerel Bilgi Portalı Web API (BLM4581 Ağ Tabanlı Teknolojiler ve Uygulamaları)"
+    });
+
     // JWT support in Swagger UI
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
@@ -67,7 +82,7 @@ builder.Services.AddSwaggerGen(c =>
                     Id = "Bearer"
                 }
             },
-            new string[] { }
+            Array.Empty<string>()
         }
     });
 });
@@ -78,20 +93,12 @@ var app = builder.Build();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-// Swagger API documentation
-app.UseSwagger();
-app.UseSwaggerUI(c =>
-{
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "BandirmaCepte API v1");
-    c.RoutePrefix = "swagger";
-});
-
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 
-// Ensure DB is created and seed admin/user
+// Ensure DB is created and seed admin/user + sample data (Week 3)
 await SeedData.EnsureCreatedAsync(app);
 
 app.Run();

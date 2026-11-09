@@ -1,8 +1,9 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BandirmaCepte.Data;
 using BandirmaCepte.Models;
+using System.Security.Claims;
 
 namespace BandirmaCepte.Controllers;
 
@@ -20,13 +21,19 @@ public class NewsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<News>>> GetAll()
     {
-        return await _context.News.OrderByDescending(n => n.PublishedAt).ToListAsync();
+        return await _context.News
+            .Include(n => n.User)
+            .OrderByDescending(n => n.PublishedAt)
+            .ToListAsync();
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<News>> GetById(int id)
     {
-        var item = await _context.News.FindAsync(id);
+        var item = await _context.News
+            .Include(n => n.User)
+            .FirstOrDefaultAsync(n => n.Id == id);
+
         if (item == null) return NotFound();
         return item;
     }
@@ -38,6 +45,14 @@ public class NewsController : ControllerBase
         if (!ModelState.IsValid) return BadRequest(ModelState);
 
         news.PublishedAt = DateTime.UtcNow;
+
+        // Oturumu açık olan admin kullanıcısının ID'sini ata
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (int.TryParse(userIdClaim, out int userId))
+        {
+            news.UserId = userId;
+        }
+
         _context.News.Add(news);
         await _context.SaveChangesAsync();
 
@@ -55,6 +70,8 @@ public class NewsController : ControllerBase
 
         existing.Title = news.Title;
         existing.Content = news.Content;
+        existing.Source = news.Source;
+        existing.IsPublished = news.IsPublished;
 
         await _context.SaveChangesAsync();
         return NoContent();
