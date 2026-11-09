@@ -6,6 +6,8 @@
 > **Öğrenci:** Zeynep Lal Kaşıkçı (22290070)  
 > **1. Hafta Teslimi:** [Google Drive Bağlantısı](https://drive.google.com/file/d/1bnuVva1_aneg7ZNEorloHewDkUVMJnBj/view?usp=drive_link)
 > **2. Hafta Teslimi:** [Google Drive Bağlantısı](https://drive.google.com/file/d/1E2LQXYvk5l5oFwKakm0hPz8iuuig6xtC/view?usp=sharing)
+> **3. Hafta Teslimi:** [Google Drive Bağlantısı](https://drive.google.com/file/d/18FHCMDOwulYwNRgUvXIgytxFjj_9uXC8/view?usp=sharing)
+> Dosya Drive Bağlantısı:[Google Drive Bağlantısı](https://drive.google.com/drive/folders/1yvspIT4KBqQWabtEsUVhYYAO2PwjQfHD?usp=sharing)
 
 ## 🚀 Özellikler
 
