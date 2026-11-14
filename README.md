@@ -3,22 +3,15 @@
 **Bandırma Cepte**, Bandırma'da yaşayanların ve ilçeyi ziyaret edenlerin günlük yaşamda ihtiyaç duyduğu yerel bilgilere (haberler, nöbetçi eczaneler, otobüs saatleri, depremler ve acil durum numaraları) tek bir platform üzerinden ulaşmasını sağlayan bir yerel bilgi portalı ve Web API projesidir.
 
 > **Ders:** BLM4581 Ağ Tabanlı Teknolojiler ve Uygulamaları  
-> **Öğrenci:** Zeynep Lal Kaşıkçı (22290070)  
-<<<<<<< Updated upstream
+> **Öğrenci:** Zeynep Lal Kaşıkçı
 > **1. Hafta Teslimi:** [Google Drive Bağlantısı](https://drive.google.com/file/d/1bnuVva1_aneg7ZNEorloHewDkUVMJnBj/view?usp=drive_link)
 > **2. Hafta Teslimi:** [Google Drive Bağlantısı](https://drive.google.com/file/d/1E2LQXYvk5l5oFwKakm0hPz8iuuig6xtC/view?usp=sharing)
-<<<<<<< HEAD
 > **3. Hafta Teslimi:** [Google Drive Bağlantısı](https://drive.google.com/file/d/18FHCMDOwulYwNRgUvXIgytxFjj_9uXC8/view?usp=sharing)
 > Dosya Drive Bağlantısı:[Google Drive Bağlantısı](https://drive.google.com/drive/folders/1yvspIT4KBqQWabtEsUVhYYAO2PwjQfHD?usp=sharing)
-=======
-=======
 > **GitHub Deposu:** [lalkasikci/BLM4581-BandirmaCepte](https://github.com/lalkasikci/BLM4581-BandirmaCepte)  
 > **Google Drive Bağlantısı:** [Dönem Projesi Klasörü](https://drive.google.com/drive/folders/1yvspIT4KBqQWabtEsUVhYYAO2PwjQfHD)
->>>>>>> b7e368d (4. hafta)
 
 ---
->>>>>>> Stashed changes
-
 ## 📅 Hafta Bazlı İlerleme Durumu
 
 | Hafta | Planlanan İşler | Durum | Açıklama |
