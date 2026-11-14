@@ -7,6 +7,7 @@
 > **1. Hafta Teslimi:** [Google Drive Bağlantısı](https://drive.google.com/file/d/1bnuVva1_aneg7ZNEorloHewDkUVMJnBj/view?usp=drive_link)
 > **2. Hafta Teslimi:** [Google Drive Bağlantısı](https://drive.google.com/file/d/1E2LQXYvk5l5oFwKakm0hPz8iuuig6xtC/view?usp=sharing)
 > **3. Hafta Teslimi:** [Google Drive Bağlantısı](https://drive.google.com/file/d/18FHCMDOwulYwNRgUvXIgytxFjj_9uXC8/view?usp=sharing)
+> **4. Hafta Teslimi:** [Google Drive Bağlantısı](https://drive.google.com/file/d/1f2Ngev0Fo--6OHNcDvhMILgiU-1-MN2x/view?usp=sharing)
 > Dosya Drive Bağlantısı:[Google Drive Bağlantısı](https://drive.google.com/drive/folders/1yvspIT4KBqQWabtEsUVhYYAO2PwjQfHD?usp=sharing)
 > **GitHub Deposu:** [lalkasikci/BLM4581-BandirmaCepte](https://github.com/lalkasikci/BLM4581-BandirmaCepte)  
 > **Google Drive Bağlantısı:** [Dönem Projesi Klasörü](https://drive.google.com/drive/folders/1yvspIT4KBqQWabtEsUVhYYAO2PwjQfHD)
