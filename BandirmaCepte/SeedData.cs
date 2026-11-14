@@ -75,47 +75,17 @@ public static class SeedData
                 await ctx.SaveChangesAsync();
             }
 
-            // 3. Örnek Haber Verileri (Week 3 - Admin ile ilişkili)
-            if (!await ctx.News.AnyAsync())
+            var demoNewsTitles = new[]
             {
-                ctx.News.AddRange(
-                    new News
-                    {
-                        Title = "Bandırma Sahil Kordonu Yenileme Projesi Başladı",
-                        Content = "Bandırma sahil bandında çevre düzenlemesi, bisiklet yolları ve yürüyüş parkurlarının yenilenmesi için çalışmalar aralıksız sürüyor. Proje tamamlandığında ilçe sakinlerine modern bir sahil alanı sunulacak.",
-                        Source = "Bandırma Belediyesi",
-                        PublishedAt = DateTime.UtcNow.AddDays(-1),
-                        IsPublished = true,
-                        UserId = adminUser.Id
-                    },
-                    new News
-                    {
-                        Title = "Bandırma Onyedi Eylül Üniversitesi Bahar Şenlikleri Programı Açıklandı",
-                        Content = "BANÜ merkez kampüsünde 15-18 Mayıs tarihleri arasında gerçekleştirilecek bahar şenlikleri kapsamında spor turnuvaları, atölyeler ve ünlü sanatçıların katılımıyla konserler düzenlenecek.",
-                        Source = "BANÜ Rektörlüğü",
-                        PublishedAt = DateTime.UtcNow.AddDays(-2),
-                        IsPublished = true,
-                        UserId = adminUser.Id
-                    },
-                    new News
-                    {
-                        Title = "Bandırma Kuşcenneti Milli Parkı Ziyaretçi Rekoruna Koşuyor",
-                        Content = "Bahar göç döneminde yüzlerce farklı kuş türüne ev sahipliği yapan Bandırma Kuşcenneti Milli Parkı, hafta sonu yerli ve yabancı doğaseverlerin yoğun ilgisiyle karşılaştı.",
-                        Source = "Doğa Koruma ve Milli Parklar",
-                        PublishedAt = DateTime.UtcNow.AddDays(-3),
-                        IsPublished = true,
-                        UserId = adminUser.Id
-                    },
-                    new News
-                    {
-                        Title = "Bandırmaspor TFF 1. Lig Maçı Biletleri Satışa Sunuldu",
-                        Content = "Bu hafta sonu 17 Eylül Stadyumu'nda oynanacak kritik lig mücadelesi öncesinde Passolig ve stadyum gişelerinden bilet satışları başladı. Taraftarların yoğun ilgi göstermesi bekleniyor.",
-                        Source = "Bandırmaspor Kulübü",
-                        PublishedAt = DateTime.UtcNow.AddDays(-4),
-                        IsPublished = true,
-                        UserId = adminUser.Id
-                    }
-                );
+                "Bandırma Sahil Kordonu Yenileme Projesi Başladı",
+                "Bandırma Onyedi Eylül Üniversitesi Bahar Şenlikleri Programı Açıklandı",
+                "Bandırma Kuşcenneti Milli Parkı Ziyaretçi Rekoruna Koşuyor",
+                "Bandırmaspor TFF 1. Lig Maçı Biletleri Satışa Sunuldu"
+            };
+            var demoNews = await ctx.News.Where(news => demoNewsTitles.Contains(news.Title)).ToListAsync();
+            if (demoNews.Count > 0)
+            {
+                ctx.News.RemoveRange(demoNews);
                 await ctx.SaveChangesAsync();
             }
 

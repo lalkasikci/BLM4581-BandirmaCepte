@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using BandirmaCepte.Data;
 using BandirmaCepte.Models;
 using System.Security.Claims;
+using BandirmaCepte.Services;
 
 namespace BandirmaCepte.Controllers;
 
@@ -12,10 +13,30 @@ namespace BandirmaCepte.Controllers;
 public class NewsController : ControllerBase
 {
     private readonly BandirmaContext _context;
+    private readonly MunicipalNewsService _municipalNews;
 
-    public NewsController(BandirmaContext context)
+    public NewsController(BandirmaContext context, MunicipalNewsService municipalNews)
     {
         _context = context;
+        _municipalNews = municipalNews;
+    }
+
+    [HttpGet("municipal")]
+    [AllowAnonymous]
+    public async Task<ActionResult<IReadOnlyList<MunicipalNewsItem>>> GetMunicipalNews(CancellationToken cancellationToken)
+    {
+        try
+        {
+            return Ok(await _municipalNews.GetLatestAsync(cancellationToken));
+        }
+        catch (HttpRequestException)
+        {
+            return StatusCode(StatusCodes.Status502BadGateway, new { message = "Bandırma Belediyesi haber kaynağına şu anda ulaşılamıyor." });
+        }
+        catch (TaskCanceledException) when (!cancellationToken.IsCancellationRequested)
+        {
+            return StatusCode(StatusCodes.Status504GatewayTimeout, new { message = "Belediye haber kaynağından yanıt zaman aşımına uğradı." });
+        }
     }
 
     [HttpGet]
@@ -46,7 +67,7 @@ public class NewsController : ControllerBase
 
         news.PublishedAt = DateTime.UtcNow;
 
-        // Oturumu açık olan admin kullanıcısının ID'sini ata
+        
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (int.TryParse(userIdClaim, out int userId))
         {

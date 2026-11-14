@@ -12,6 +12,7 @@ public class News
     public string Title { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Haber içeriği zorunludur.")]
+    [MaxLength(5000, ErrorMessage = "Haber içeriği en fazla 5000 karakter olabilir.")]
     public string Content { get; set; } = string.Empty;
 
     [MaxLength(150)]

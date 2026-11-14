@@ -15,14 +15,12 @@ public class BusSchedule
 
     [Required(ErrorMessage = "Kalkış saati zorunludur.")]
     [MaxLength(10)]
-    public string DepartureTime { get; set; } = string.Empty; // örn: "07:30", "08:15"
+    public string DepartureTime { get; set; } = string.Empty; 
 
     [MaxLength(100)]
-    public string DeparturePoint { get; set; } = string.Empty; // örn: "Meydan Kalkış"
-
+    public string DeparturePoint { get; set; } = string.Empty; 
     [MaxLength(100)]
-    public string ArrivalPoint { get; set; } = string.Empty; // örn: "Paşabayır Varış"
-
+    public string ArrivalPoint { get; set; } = string.Empty; 
     [MaxLength(50)]
-    public string DayType { get; set; } = "Hafta İçi"; // örn: "Hafta İçi", "Hafta Sonu", "Her Gün"
+    public string DayType { get; set; } = "Hafta İçi"; 
 }

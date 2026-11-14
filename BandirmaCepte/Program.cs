@@ -14,6 +14,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add PostgreSQL DbContext
 builder.Services.AddDbContext<BandirmaContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("BandirmaDb")));
+builder.Services.AddHttpClient<BandirmaCepte.Services.MunicipalNewsService>(client =>
+{
+    client.DefaultRequestHeaders.UserAgent.ParseAdd("BandirmaCepte/1.0 (+local community news reader)");
+    client.Timeout = TimeSpan.FromSeconds(10);
+});
+builder.Services.AddMemoryCache();
 
 // Add authentication (JWT)
 var jwtSettings = builder.Configuration.GetSection("Jwt");
@@ -44,8 +50,8 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("UserOrAdmin", policy => policy.RequireRole("User", "Admin"));
 });
 
-// Controllers with JSON options to ignore circular references
-builder.Services.AddControllers()
+// MVC controllers and views, plus API controllers
+builder.Services.AddControllersWithViews()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
@@ -89,14 +95,18 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-// Static files & Default page (serves wwwroot/index.html on /)
-app.UseDefaultFiles();
+app.UseSwagger();
+app.UseSwaggerUI();
+
 app.UseStaticFiles();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 // Ensure DB is created and seed admin/user + sample data (Week 3)
 await SeedData.EnsureCreatedAsync(app);

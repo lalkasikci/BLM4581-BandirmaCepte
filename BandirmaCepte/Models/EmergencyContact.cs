@@ -16,12 +16,12 @@ public class EmergencyContact
     public string PhoneNumber { get; set; } = string.Empty;
 
     [MaxLength(50)]
-    public string? Category { get; set; } // örn: "Acil Çağrı", "Sağlık", "Güvenlik", "Belediye", "Altyapı & Arıza"
+    public string? Category { get; set; } 
 
     [MaxLength(250)]
     public string? Description { get; set; }
 
-    // İlişki: Numarayı ekleyen/düzenleyen yönetici (User)
+    
     public int? UserId { get; set; }
 
     [JsonIgnore]

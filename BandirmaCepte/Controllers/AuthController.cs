@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -23,19 +24,32 @@ public class AuthController : ControllerBase
         _configuration = configuration;
     }
 
-    public record RegisterDto(string Username, string Password);
+    public record RegisterDto(
+        [Required, StringLength(100, MinimumLength = 3)] string Username,
+        [Required, MinLength(8)] string Password);
     public record LoginDto(string Username, string Password);
     public record AuthResponseDto(string Token, string Username, string Role);
 
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterDto dto)
     {
-        if (string.IsNullOrWhiteSpace(dto.Username) || string.IsNullOrWhiteSpace(dto.Password))
+        var username = dto.Username.Trim();
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(dto.Password))
         {
             return BadRequest(new { message = "Kullanıcı adı ve şifre zorunludur." });
         }
 
-        if (await _context.Users.AnyAsync(u => u.Username.ToLower() == dto.Username.ToLower()))
+        if (username.Length < 3 || username.Length > 100)
+        {
+            return BadRequest(new { message = "Kullanıcı adı 3 ile 100 karakter arasında olmalıdır." });
+        }
+
+        if (dto.Password.Length < 8)
+        {
+            return BadRequest(new { message = "Şifre en az 8 karakter olmalıdır." });
+        }
+
+        if (await _context.Users.AnyAsync(u => u.Username.ToLower() == username.ToLower()))
         {
             return BadRequest(new { message = "Bu kullanıcı adı zaten kullanılıyor." });
         }
@@ -45,7 +59,7 @@ public class AuthController : ControllerBase
 
         var user = new User
         {
-            Username = dto.Username,
+            Username = username,
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
             RoleId = roleId
         };

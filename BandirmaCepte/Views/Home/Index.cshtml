@@ -30,7 +30,7 @@
         .footer { background:#12343b }
         main.container { max-width:1160px }
         section { scroll-margin-top:90px }
-        @media(max-width:767px){.hero-banner{padding:48px 0 42px;border-radius:0 0 24px 24px}.display-6{font-size:2rem}}
+        @@media(max-width:767px){.hero-banner{padding:48px 0 42px;border-radius:0 0 24px 24px}.display-6{font-size:2rem}}
         :root {
             --primary-color: #0b5ed7;
             --secondary-color: #0d6efd;
@@ -135,7 +135,7 @@
         .nav-tabs .nav-link.active { color:#1769aa; border-bottom-color:#1769aa; }
         .footer { background:#103b5c; color:#c7e3f2; }
         section { scroll-margin-top:82px; }
-        @media(max-width:767px) { .hero-banner { padding:48px 0 38px; } .hero-banner:after { font-size:180px; right:2%; top:28px; } .navbar .navbar-collapse { padding-top:12px; } }
+        @@media(max-width:767px) { .hero-banner { padding:48px 0 38px; } .hero-banner:after { font-size:180px; right:2%; top:28px; } .navbar .navbar-collapse { padding-top:12px; } }
         .quick-card small,.quick-card h5,.quick-card h5 span { color:#173d57!important; }
         #pharmaciesContainer,#emergencyContainer { max-height:290px; overflow-y:auto; padding-right:8px; scrollbar-color:#79b8d6 #edf5fa; scrollbar-width:thin; }
         #pharmaciesContainer::-webkit-scrollbar,#emergencyContainer::-webkit-scrollbar { width:7px; }
@@ -195,7 +195,7 @@
                 </div>
                 <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
                     <div id="adminActionBtn" style="display: none;">
-                        <button class="btn btn-warning fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#addNewsModal">
+                        <button class="btn btn-warning fw-bold shadow-sm" onclick="openNewsForm()">
                             <i class="fa-solid fa-plus-circle me-1"></i> Yeni Haber Ekle
                         </button>
                     </div>
@@ -259,7 +259,7 @@
         <section id="haberler" class="mb-5">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h3 class="fw-bold"><i class="fa-solid fa-newspaper text-primary me-2"></i>Yerel Haberler ve Duyurular</h3>
-                <span class="badge bg-light text-dark border">Otomatik Güncel</span>
+                <a class="btn btn-outline-primary" href="/Home/News">Tüm Haberleri Gör <i class="fa-solid fa-arrow-right ms-1"></i></a>
             </div>
             <div class="row g-4" id="newsContainer">
                 <div class="col-12 text-center py-4">
@@ -410,18 +410,21 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow">
                 <div class="modal-header bg-warning">
-                    <h5 class="modal-title fw-bold text-dark"><i class="fa-solid fa-plus-circle me-2"></i>Yeni Haber Ekle (Admin)</h5>
+                    <h5 class="modal-title fw-bold text-dark" id="newsModalTitle"><i class="fa-solid fa-plus-circle me-2"></i>Yeni Haber Ekle (Admin)</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-4">
                     <form id="addNewsForm">
+                        <input type="hidden" id="newsId">
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Haber Başlığı</label>
-                            <input type="text" id="newsTitle" class="form-control" placeholder="Haber başlığı" required>
+                            <input type="text" id="newsTitle" class="form-control" placeholder="Haber başlığı" maxlength="200" required>
+                            <div class="invalid-feedback">Başlık zorunludur ve en fazla 200 karakter olabilir.</div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Haber İçeriği</label>
-                            <textarea id="newsContent" class="form-control" rows="5" placeholder="Haber detaylarını yazın..." required></textarea>
+                            <textarea id="newsContent" class="form-control" rows="5" maxlength="5000" placeholder="Haber detaylarını yazın..." required></textarea>
+                            <div class="invalid-feedback">Haber içeriği zorunludur.</div>
                         </div>
                         <button type="submit" class="btn btn-warning w-100 fw-bold py-2">
                             <i class="fa-solid fa-save me-1"></i> Haberi Yayınla
@@ -561,24 +564,34 @@
             try {
                 const res = await fetch(`${API_URL}/api/news`);
                 const news = await res.json();
-                if (news.length === 0) {
+                const municipalResponse = await fetch(`${API_URL}/api/news/municipal`);
+                const municipalNews = municipalResponse.ok ? await municipalResponse.json() : [];
+                const allNews = [
+                    ...municipalNews.map(item => ({ ...item, isMunicipal: true })),
+                    ...news
+                ];
+                if (allNews.length === 0) {
                     container.innerHTML = `<div class="col-12"><div class="alert alert-light text-center border">Henüz yayınlanmış haber bulunmamaktadır.</div></div>`;
                     return;
                 }
-                container.innerHTML = news.map(item => `
+                container.innerHTML = allNews.slice(0, 4).map(item => `
                     <div class="col-md-6">
                         <div class="card card-custom h-100 p-4">
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <div>
-                                    <span class="badge bg-primary bg-opacity-10 text-primary fw-bold me-1">Yerel Haber</span>
+                                    <span class="badge bg-primary bg-opacity-10 text-primary fw-bold me-1">${item.isMunicipal ? 'Belediye Haberi' : 'Yerel Haber'}</span>
                                     ${item.source ? `<span class="badge bg-secondary bg-opacity-10 text-secondary"><i class="fa-solid fa-bullhorn me-1"></i>${escapeHtml(item.source)}</span>` : ''}
                                 </div>
-                                <small class="text-muted"><i class="fa-regular fa-clock me-1"></i>${new Date(item.publishedAt).toLocaleDateString('tr-TR')}</small>
+                                <small class="text-muted">${item.publishedAt ? `<i class="fa-regular fa-clock me-1"></i>${new Date(item.publishedAt).toLocaleDateString('tr-TR')}` : 'Güncel'}</small>
                             </div>
                             <h5 class="fw-bold text-dark">${escapeHtml(item.title)}</h5>
-                            <p class="text-secondary mb-3">${escapeHtml(item.content)}</p>
-                            ${currentUser && currentUser.role === 'Admin' ? `
+                            ${(item.summary || item.content) ? `<p class="text-secondary mb-3">${escapeHtml(item.summary || item.content)}</p>` : ''}
+                            ${item.isMunicipal ? `<a href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-primary mt-auto">Belediye sitesinde oku <i class="fa-solid fa-arrow-up-right-from-square ms-1"></i></a>` : ''}
+                            ${!item.isMunicipal && currentUser && currentUser.role === 'Admin' ? `
                                 <div class="mt-auto pt-2 border-top text-end">
+                                    <button class="btn btn-outline-primary btn-sm me-2" onclick="editNews(${item.id}, '${escapeAttribute(item.title)}', '${escapeAttribute(item.content)}')">
+                                        <i class="fa-solid fa-pen me-1"></i> Düzenle
+                                    </button>
                                     <button class="btn btn-outline-danger btn-sm" onclick="deleteNews(${item.id})">
                                         <i class="fa-solid fa-trash me-1"></i> Sil
                                     </button>
@@ -610,27 +623,55 @@
             }
         }
 
-        // HABER EKLE (ADMIN)
+        function escapeAttribute(text) {
+            return String(text || '').replaceAll('\\', '\\\\').replaceAll("'", "\\'").replaceAll('\n', '\\n').replaceAll('\r', '');
+        }
+
+        function openNewsForm() {
+            document.getElementById('addNewsForm').reset();
+            document.getElementById('newsId').value = '';
+            document.getElementById('newsModalTitle').innerText = 'Yeni Haber Ekle (Admin)';
+            document.getElementById('addNewsForm').classList.remove('was-validated');
+            new bootstrap.Modal(document.getElementById('addNewsModal')).show();
+        }
+
+        function editNews(id, title, content) {
+            document.getElementById('newsId').value = id;
+            document.getElementById('newsTitle').value = title;
+            document.getElementById('newsContent').value = content;
+            document.getElementById('newsModalTitle').innerText = 'Haberi Düzenle';
+            document.getElementById('addNewsForm').classList.remove('was-validated');
+            new bootstrap.Modal(document.getElementById('addNewsModal')).show();
+        }
+
+        // Haber oluşturma ve güncelleme
         document.getElementById('addNewsForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            const form = e.currentTarget;
+            if (!form.checkValidity()) {
+                form.classList.add('was-validated');
+                return;
+            }
             const title = document.getElementById('newsTitle').value;
             const content = document.getElementById('newsContent').value;
+            const id = document.getElementById('newsId').value;
 
             try {
-                const res = await fetch(`${API_URL}/api/news`, {
-                    method: 'POST',
+                const res = await fetch(`${API_URL}/api/news${id ? `/${id}` : ''}`, {
+                    method: id ? 'PUT' : 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${currentUser.token}`
                     },
-                    body: JSON.stringify({ title, content, source: 'Yönetici Paneli' })
+                    body: JSON.stringify({ id: id ? Number(id) : 0, title, content, source: 'Yönetici Paneli', isPublished: true })
                 });
                 if (res.ok) {
                     document.getElementById('addNewsForm').reset();
                     bootstrap.Modal.getInstance(document.getElementById('addNewsModal')).hide();
                     loadNews();
                 } else {
-                    alert('Haber eklenirken yetki veya doğrulama hatası oluştu.');
+                    const error = await res.json().catch(() => null);
+                    alert(error?.title || error?.message || 'Haber kaydedilirken doğrulama veya yetki hatası oluştu.');
                 }
             } catch (err) {
                 alert('Hata: ' + err.message);

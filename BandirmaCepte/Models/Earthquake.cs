@@ -20,9 +20,9 @@ public class Earthquake
     public DateTime OccurrenceTime { get; set; } = DateTime.UtcNow;
 
     [MaxLength(100)]
-    public string? Source { get; set; } = "Kandilli Rasathanesi"; // örn. "Kandilli Rasathanesi", "AFAD", "Yönetici Girişi"
+    public string? Source { get; set; } = "Kandilli Rasathanesi";
 
-    // İlişki: Manuel kayıt durumunda ekleyen kullanıcı (User)
+    
     public int? UserId { get; set; }
 
     [JsonIgnore]
